@@ -4,12 +4,23 @@ import {authFactory, AuthError} from "./auth";
 import authMiddleware from './controllers/AuthMiddleware';
 import moviesController from './controllers/MoviesController';
 import getSecretJWT from "./lib/getSecretJWT";
+import mongoose from "mongoose";
+import Constants from "./lib/Config";
+
 const PORT = 3000;
 
 const JWT_SECRET = getSecretJWT();
 
 const auth = authFactory(JWT_SECRET);
 const app = express();
+
+mongoose
+  .connect(Constants.DB_URI, {
+    useNewUrlParser: true,
+    useCreateIndex: true,
+    useFindAndModify: false
+  })
+  .then(() => console.log('DB connnection successful!'));
 
 app.use(bodyParser.json());
 
