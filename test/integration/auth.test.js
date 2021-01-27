@@ -1,12 +1,12 @@
 const expect = require("chai").expect;
-const server = require("../../src/server");
+const server = require("../../build/server");
 const request = require("supertest")(server);
 const pick = require("lodash/pick");
 const users = require("../fixtures/users");
 const faker = require("faker");
 const errorResponses = require('../fixtures/errorResponses');
 
-describe("authorization API", () => {
+function authTest() {
   const premiumUser = pick(users[1], ["username", "password"]);
   const basicUser = pick(users[0], ["username", "password"]);
   const userWithWrongPassword = {
@@ -21,7 +21,7 @@ describe("authorization API", () => {
     done();
   });
 
-  it("basic user", (done) => {
+  it("basic user",  (done) => {
     request
       .post("/auth")
       .set("Accept", "application/json")
@@ -33,7 +33,7 @@ describe("authorization API", () => {
     done();
   });
 
-  it("premium user user", (done) => {
+  it("premium user user",  (done) => {
     request
       .post("/auth")
       .set("Accept", "application/json")
@@ -45,7 +45,7 @@ describe("authorization API", () => {
     done();
   });
 
-  it("wrong password", (done) => {
+  it("wrong password",  (done) => {
     request
       .post("/auth")
       .set("Accept", "application/json")
@@ -68,4 +68,5 @@ describe("authorization API", () => {
       });
     done();
   });
-});
+}
+module.exports = authTest;

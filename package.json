@@ -4,7 +4,7 @@
   "description": "",
   "main": "src/server.ts",
   "scripts": {
-    "test": "JWT_SECRET=test TS_NODE_COMPILER_OPTIONS='{\"module\": \"commonjs\" }' mocha -r ts-node/register './test/**/*.test.js'",
+    "test": "tsc -p . && TS_NODE_COMPILER_OPTIONS='{\"module\": \"commonjs\" }' mocha -p tsconfig.json -r ts-node/register './test/index.js'",
     "transpile": "tsc -p .",
     "start": "tsc -p . && node build/server.js"
   },
