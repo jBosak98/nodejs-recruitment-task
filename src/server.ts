@@ -2,7 +2,7 @@ import express, {NextFunction, Request, Response} from "express";
 import bodyParser from "body-parser";
 import {authFactory, AuthError} from "./auth";
 import authMiddleware from './controllers/AuthMiddleware';
-import moviesController from './controllers/MoviesController';
+import movieController from './controllers/MovieController';
 import getSecretJWT from "./lib/getSecretJWT";
 import mongoose from "mongoose";
 import Constants from "./lib/Config";
@@ -58,7 +58,7 @@ app.use(async (error: unknown, _: Request, res: Response, __: NextFunction) => {
   return res.status(500).json({error: "internal server error"});
 });
 
-app.use('/movies', authMiddleware, moviesController);
+app.use('/movies', authMiddleware, movieController);
 
 app.listen(PORT, () => {
   console.log(`auth svc running at port ${PORT}`);

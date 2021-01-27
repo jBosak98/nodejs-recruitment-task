@@ -14,6 +14,5 @@ export default function (req: Request, res: Response, next: NextFunction) {
       req.auth = decoded as Auth
       next()
     }
-  })
-
+  });
 }
