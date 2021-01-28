@@ -5,8 +5,8 @@
   "main": "src/server.ts",
   "scripts": {
     "test": "tsc -p . && TS_NODE_COMPILER_OPTIONS='{\"module\": \"commonjs\" }' mocha --timeout 10000 -r ts-node/register './test/index.js'",
-    "transpile": "tsc -p .",
-    "start": "tsc -p . && node build/server.js"
+    "build": "tsc -p .",
+    "start": "node build/server.js"
   },
   "keywords": [],
   "author": "",
