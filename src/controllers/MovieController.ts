@@ -29,9 +29,10 @@ MoviesController
     const requestLink = getOmdbLink(req.body.title);
     const additionalRequest = await fetch(requestLink);
     const additionalInfo = await additionalRequest.json();
+
     const movie: MovieType = {
       title: req.body.title,
-      owner: mongoose.Types.ObjectId(req.auth.userId),
+      owner: req.auth.userId,
       released: Date.parse(additionalInfo.Released) ? new Date(additionalInfo.Released) : null,
       genre: additionalInfo.Genre || null,
       director: additionalInfo.Director || null
@@ -39,6 +40,12 @@ MoviesController
     const data = await MovieService.createMovie(movie);
 
     handleData({data, res});
-  })
+  });
+
+MoviesController.get('/', async (req,res,next) => {
+  const {userId} = req.auth;
+  const data = await MovieService.listMoviesByUserId(userId);
+  handleData({data, res});
+})
 
 export default MoviesController;

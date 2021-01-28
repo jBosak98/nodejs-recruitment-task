@@ -14,6 +14,8 @@ const createMovie = (movieInput:any) => prepareResponse(Movie.create(movieInput)
 
 const listMovies = () => prepareResponse(Movie.find())
 
+const listMoviesByUserId = (ownerId:number) => prepareResponse(Movie.find({owner:ownerId}));
+
 const dbModelToLogic = ({_id, title, released, genre, director}: DBMovieType) => ({
   id: _id,
   title,
@@ -23,4 +25,4 @@ const dbModelToLogic = ({_id, title, released, genre, director}: DBMovieType) =>
 })
 const dbModelsToLogic = (movies: DBMovieType[]) => movies.map(m => dbModelToLogic(m))
 
-export default {createMovie, listMovies}
+export default {createMovie, listMovies, listMoviesByUserId}
