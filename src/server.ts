@@ -6,6 +6,7 @@ import movieController from './controllers/MovieController';
 import getSecretJWT from "./lib/getSecretJWT";
 import mongoose from "mongoose";
 import Constants from "./lib/Config";
+import cors from 'cors';
 
 const PORT = 3000;
 
@@ -23,6 +24,9 @@ mongoose
   .then(() => console.log('DB connnection successful!'));
 
 app.use(bodyParser.json());
+
+app.use(cors());
+
 
 app.post("/auth", (req, res, next) => {
   if (!req.body) {
