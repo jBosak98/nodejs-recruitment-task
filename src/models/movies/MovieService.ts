@@ -5,7 +5,10 @@ const prepareResponse = (promise: any) => promise
     error: false,
     data: Array.isArray(e) ? dbModelsToLogic(e) : dbModelToLogic(e)
   }))
-  .catch((e: any) => ({error: true, errors: e._message ? [e._message] : e}))
+  .catch((e: any) => {
+    console.error(e);
+    return {error: true, errors: e._message ? [e._message] : e};
+  })
 
 const createMovie = (movieInput:any) => prepareResponse(Movie.create(movieInput))
 

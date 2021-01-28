@@ -1,11 +1,11 @@
 import mongoose, {Schema} from "mongoose";
 
 type MovieType = {
-  _id: String,
-  title: String,
+  _id: string,
+  title: string,
   released: Date,
-  genre: String,
-  directory: String
+  genre: string,
+  directory: string
 }
 
 const movieSchema = new mongoose.Schema({
