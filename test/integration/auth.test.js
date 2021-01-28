@@ -21,7 +21,7 @@ function authTest() {
     done();
   });
 
-  it("basic user",  (done) => {
+  it("basic user", (done) => {
     request
       .post("/auth")
       .set("Accept", "application/json")
@@ -33,7 +33,7 @@ function authTest() {
     done();
   });
 
-  it("premium user user",  (done) => {
+  it("premium user user", (done) => {
     request
       .post("/auth")
       .set("Accept", "application/json")
@@ -45,7 +45,7 @@ function authTest() {
     done();
   });
 
-  it("wrong password",  (done) => {
+  it("wrong password", (done) => {
     request
       .post("/auth")
       .set("Accept", "application/json")
@@ -69,4 +69,5 @@ function authTest() {
     done();
   });
 }
+
 module.exports = authTest;

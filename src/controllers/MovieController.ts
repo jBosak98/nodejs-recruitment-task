@@ -25,8 +25,8 @@ MoviesController
     const {role, userId} = req.auth;
     if (role === AccessLevel.basic) {
       const moviesInMonth = await MovieService.countRequestsAtThisMonth(userId);
-      if(moviesInMonth >= 5){
-       return res.status(429).json({message:'you have exceeded the limit'});
+      if (moviesInMonth >= 5) {
+        return res.status(429).json({message: 'you have exceeded the limit'});
       }
     }
     const requestLink = getOmdbLink(req.body.title);

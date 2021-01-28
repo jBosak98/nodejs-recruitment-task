@@ -6,8 +6,8 @@ type MovieType = {
   released: Date | null,
   genre: string | null,
   director: string | null,
-  owner:number,
-  createdAt:Date
+  owner: number,
+  createdAt: Date
 }
 type DBMovieType = MovieType & {
   _id: string,
@@ -35,7 +35,7 @@ const movieSchema = new mongoose.Schema({
     ref: 'User',
     required: true
   },
-  createdAt:{
+  createdAt: {
     type: Date,
     required: true
   }

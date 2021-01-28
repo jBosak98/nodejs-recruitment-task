@@ -26,11 +26,9 @@ app.use(bodyParser.json());
 app.use(cors());
 
 
-
 app.use('/movies', authMiddleware, movieController);
 app.use('/auth', authController);
 app.use(internalErrorHandler);
-
 
 
 app.listen(PORT, () => {

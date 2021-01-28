@@ -1,6 +1,6 @@
 type Err = {
-    message: String;
-    payload?: object;
+  message: String;
+  payload?: object;
 }
 
 type Errs = Err[]

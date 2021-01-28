@@ -15,11 +15,10 @@ function moviesTest() {
     })
   );
   it("movie - empty body", async () =>
-      api.post('/movies')
-        .set("Accept", "application/json")
-        .set("authorization", `Bearer ${token}`)
-        .expect(400)
-
+    api.post('/movies')
+      .set("Accept", "application/json")
+      .set("authorization", `Bearer ${token}`)
+      .expect(400)
   )
   it("movie - proper movie", async () =>
     api.post('/movies')

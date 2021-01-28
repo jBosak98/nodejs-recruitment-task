@@ -6,7 +6,7 @@ export class AuthError extends Error {
   type = 'AuthError';
 }
 
-export const authFactory = (secret: Secret) =>async (username: string, password: string) => {
+export const authFactory = (secret: Secret) => async (username: string, password: string) => {
   const wrappedUser = await login({username, password});
 
   if (!wrappedUser.succeed) {

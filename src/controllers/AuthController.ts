@@ -1,12 +1,12 @@
 import express from "express";
-import getSecretJWT from "../lib/getSecretJWT";
 import {authFactory} from "../auth";
+import Config from "../lib/Config";
 
-const JWT_SECRET = getSecretJWT();
+const {JWT_SECRET} = Config;
 const auth = authFactory(JWT_SECRET);
 const AuthController = express.Router();
 
-AuthController.post("/", async(req, res, next) => {
+AuthController.post("/", async (req, res, next) => {
   if (!req.body) {
     return res.status(400).json({error: "invalid payload"});
   }
