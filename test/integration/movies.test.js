@@ -21,6 +21,29 @@ function moviesTest() {
       .expect('Content-Type', /json/)
       .expect(400)
   )
+  it("movie - proper movie", () =>
+    api.post('/movies')
+      .set("Accept", "application/json")
+      .set("authorization", `Bearer ${token}`)
+      .send({title:"Avatar"})
+      .expect('Content-Type', /json/)
+      .expect(200)
+  )
+  it("request with empty token", () =>
+    api.post('/movies')
+      .set("Accept", "application/json")
+      .set("authorization", `Bearer `)
+      .send({title:"Avatar"})
+      .expect('Content-Type', /json/)
+      .expect(401)
+  )
+  it("request without token", () =>
+    api.post('/movies')
+      .set("Accept", "application/json")
+      .send({title:"Avatar"})
+      .expect('Content-Type', /json/)
+      .expect(401)
+  )
 }
 
 module.exports = moviesTest;
