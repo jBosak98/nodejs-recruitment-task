@@ -1,5 +1,4 @@
-import mongoose, {Schema} from "mongoose";
-import { ObjectID } from 'mongodb';
+import mongoose from "mongoose";
 
 type MovieType = {
 
@@ -7,7 +6,8 @@ type MovieType = {
   released: Date | null,
   genre: string | null,
   director: string | null,
-  owner:number
+  owner:number,
+  createdAt:Date
 }
 type DBMovieType = MovieType & {
   _id: string,
@@ -31,9 +31,14 @@ const movieSchema = new mongoose.Schema({
     required: false
   },
   owner: {
-    type: Number, ref: 'User',
+    type: Number,
+    ref: 'User',
     required: true
   },
+  createdAt:{
+    type: Date,
+    required: true
+  }
 })
 const Movie = mongoose.model("Movie", movieSchema);
 export {Movie, MovieType, DBMovieType}

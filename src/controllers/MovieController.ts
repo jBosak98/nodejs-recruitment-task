@@ -1,20 +1,16 @@
-import express, {NextFunction, Request, Response} from 'express';
-import mongoose from 'mongoose';
+import express, {Request} from 'express';
 import MovieService from "../models/movies/MovieService";
 import getOmdbLink from '../lib/getOmdbLink';
 import fetch from 'node-fetch';
-import {MovieType} from "../models/movies/Movie";
-
-const getAccessLevels = (req: Request) => req.auth.role
-const generateHasAccessLvl = (lvl: string) => (req: Request) => getAccessLevels(req).includes(lvl)
-
+import {Movie, MovieType} from "../models/movies/Movie";
+import moment from 'moment';
+import AccessLevel from "../models/AccessLevel";
 
 const MoviesController = express.Router();
 
 
 const handleData = ({data, res}: { data: any, res: any }) => {
   if (data.error) {
-    console.error(data);
     res.statusCode === 200
       ? res.status(400).json(data.errors)
       : res.json(data.errors);
@@ -26,23 +22,31 @@ MoviesController
     if (!req.body.title) {
       return handleData({data: {error: true, errors: ['Title is missing']}, res});
     }
+    const {role, userId} = req.auth;
+    if (role === AccessLevel.basic) {
+      const moviesInMonth = await MovieService.countRequestsAtThisMonth(userId);
+      if(moviesInMonth >= 5){
+       return res.status(429).json({message:'you have exceeded the limit'});
+      }
+    }
     const requestLink = getOmdbLink(req.body.title);
     const additionalRequest = await fetch(requestLink);
     const additionalInfo = await additionalRequest.json();
 
     const movie: MovieType = {
       title: req.body.title,
-      owner: req.auth.userId,
+      owner: userId,
       released: Date.parse(additionalInfo.Released) ? new Date(additionalInfo.Released) : null,
       genre: additionalInfo.Genre || null,
-      director: additionalInfo.Director || null
+      director: additionalInfo.Director || null,
+      createdAt: new Date()
     };
     const data = await MovieService.createMovie(movie);
 
     handleData({data, res});
   });
 
-MoviesController.get('/', async (req,res,next) => {
+MoviesController.get('/', async (req, res, next) => {
   const {userId} = req.auth;
   const data = await MovieService.listMoviesByUserId(userId);
   handleData({data, res});

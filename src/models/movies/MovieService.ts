@@ -1,4 +1,5 @@
 import {DBMovieType, Movie} from "./Movie";
+import moment from "moment";
 
 const prepareResponse = async (promise: any) => await promise
   .then((e: DBMovieType[] | DBMovieType) => ({
@@ -14,6 +15,12 @@ const createMovie = (movieInput:any) => prepareResponse(Movie.create(movieInput)
 
 const listMovies = () => prepareResponse(Movie.find())
 
+const countRequestsAtThisMonth = async (userId:number) => {
+  const startDate = moment().startOf('month');
+  const endDate = moment().endOf('month');
+  return Movie.count({owner: userId, createdAt: {$lt: endDate, $gt: startDate}});
+}
+
 const listMoviesByUserId = (ownerId:number) => prepareResponse(Movie.find({owner:ownerId}));
 
 const dbModelToLogic = ({_id, title, released, genre, director}: DBMovieType) => ({
@@ -25,4 +32,4 @@ const dbModelToLogic = ({_id, title, released, genre, director}: DBMovieType) =>
 })
 const dbModelsToLogic = (movies: DBMovieType[]) => movies.map(m => dbModelToLogic(m))
 
-export default {createMovie, listMovies, listMoviesByUserId}
+export default {createMovie, listMovies, listMoviesByUserId, countRequestsAtThisMonth}
