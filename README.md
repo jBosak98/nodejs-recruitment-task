@@ -1,4 +1,12 @@
 # Node.js recruitment task
+Example .env file should contain at least:
+```
+JWT_SECRET=
+DB_URI=
+OMDB_KEY=
+```
+##
+##
 
 We'd like you to build a simple Movie API. It should provide two endpoints:
 
