@@ -13,7 +13,7 @@ function authTest() {
     username: basicUser.username,
     password: basicUser.password + faker.random.number(),
   };
-  it("empty request should respond with 404 code", (done) => {
+  it("empty request should respond with 400 code", (done) => {
     request.post("/auth").end((err, response) => {
       expect(response.statusCode).to.equal(400);
       expect(response.body).to.deep.equal(errorResponses.invalidPayload);
