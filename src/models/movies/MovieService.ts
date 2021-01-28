@@ -1,7 +1,7 @@
-import {Movie, MovieType} from "./Movie";
+import {DBMovieType, Movie} from "./Movie";
 
-const prepareResponse = (promise: any) => promise
-  .then((e: MovieType[] | MovieType) => ({
+const prepareResponse = async (promise: any) => await promise
+  .then((e: DBMovieType[] | DBMovieType) => ({
     error: false,
     data: Array.isArray(e) ? dbModelsToLogic(e) : dbModelToLogic(e)
   }))
@@ -14,13 +14,13 @@ const createMovie = (movieInput:any) => prepareResponse(Movie.create(movieInput)
 
 const listMovies = () => prepareResponse(Movie.find())
 
-const dbModelToLogic = ({_id, title, released, genre, directory}: MovieType) => ({
+const dbModelToLogic = ({_id, title, released, genre, director}: DBMovieType) => ({
   id: _id,
   title,
   released,
   genre,
-  directory
+  director
 })
-const dbModelsToLogic = (movies: MovieType[]) => movies.map(m => dbModelToLogic(m))
+const dbModelsToLogic = (movies: DBMovieType[]) => movies.map(m => dbModelToLogic(m))
 
 export default {createMovie, listMovies}

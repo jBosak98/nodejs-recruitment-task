@@ -6,43 +6,50 @@ const users = require("../fixtures/users");
 
 function moviesTest() {
   let token = "";
-  before(async () => {
-    const premiumUser = pick(users[1], ["username", "password"]);
-    const {body} = await api
+  beforeEach(async () =>
+    api
       .post("/auth")
       .set("Accept", "application/json")
-      .send(premiumUser);
-    token = body.token;
-  });
-  it("movie - empty body", () =>
-    api.post('/movies')
-      .set("Accept", "application/json")
-      .set("authorization", `Bearer ${token}`)
-      .expect('Content-Type', /json/)
-      .expect(400)
+      .send(pick(users[1], ["username", "password"])).then((res, rej) => {
+      token = res.body.token;
+    })
+  );
+  it("movie - empty body", async () =>
+      api.post('/movies')
+        .set("Accept", "application/json")
+        .set("authorization", `Bearer ${token}`)
+        .expect(400)
+
   )
-  it("movie - proper movie", () =>
+  it("movie - proper movie", async () =>
     api.post('/movies')
       .set("Accept", "application/json")
       .set("authorization", `Bearer ${token}`)
-      .send({title:"Avatar"})
+      .send({title: "Avatar"})
       .expect('Content-Type', /json/)
       .expect(200)
+      .then((res, rej) => {
+        expect(res.body).to.have.property('title');
+        expect(res.body).to.have.property('director');
+        expect(res.body).to.not.have.property('something');
+      })
   )
-  it("request with empty token", () =>
-    api.post('/movies')
-      .set("Accept", "application/json")
-      .set("authorization", `Bearer `)
-      .send({title:"Avatar"})
-      .expect('Content-Type', /json/)
-      .expect(401)
+  it("request with empty token", async () => {
+      await api.post('/movies')
+        .set("Accept", "application/json")
+        .set("authorization", `Bearer `)
+        .send({title: "Avatar"})
+        .expect('Content-Type', /json/)
+        .expect(401);
+    }
   )
-  it("request without token", () =>
-    api.post('/movies')
-      .set("Accept", "application/json")
-      .send({title:"Avatar"})
-      .expect('Content-Type', /json/)
-      .expect(401)
+  it("request without token", async () => {
+      await api.post('/movies')
+        .set("Accept", "application/json")
+        .send({title: "Avatar"})
+        .expect('Content-Type', /json/)
+        .expect(401);
+    }
   )
 }
 
