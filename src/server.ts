@@ -7,6 +7,7 @@ import getSecretJWT from "./lib/getSecretJWT";
 import mongoose from "mongoose";
 import Constants from "./lib/Config";
 import cors from 'cors';
+import insertUsers from "./migrations/insertUsers";
 
 const PORT = 3000;
 
@@ -14,6 +15,8 @@ const JWT_SECRET = getSecretJWT();
 
 const auth = authFactory(JWT_SECRET);
 const app = express();
+
+
 
 mongoose
   .connect(Constants.DB_URI, {
@@ -23,12 +26,14 @@ mongoose
   })
   .then(() => console.log('DB connnection successful!'));
 
+
 app.use(bodyParser.json());
 
 app.use(cors());
 
+insertUsers();
 
-app.post("/auth", (req, res, next) => {
+app.post("/auth", async(req, res, next) => {
   if (!req.body) {
     return res.status(400).json({error: "invalid payload"});
   }
@@ -40,7 +45,7 @@ app.post("/auth", (req, res, next) => {
   }
 
   try {
-    const token = auth(username, password);
+    const token = await auth(username, password);
 
     return res.status(200).json({token});
   } catch (error) {

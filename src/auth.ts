@@ -1,32 +1,18 @@
 import jwt, {Secret} from "jsonwebtoken";
+import {login} from './models/users/UserService';
 
-const users = [
-  {
-    id: 123,
-    role: "basic",
-    name: "Basic Thomas",
-    username: "basic-thomas",
-    password: "sR-_pcoow-27-6PAwCD8",
-  },
-  {
-    id: 434,
-    role: "premium",
-    name: "Premium Jim",
-    username: "premium-jim",
-    password: "GBLtTyq3E_UNjFnpo9m6",
-  },
-];
 
 export class AuthError extends Error {
   type = 'AuthError';
 }
 
-export const authFactory = (secret: Secret) => (username: string, password: string) => {
-  const user = users.find((u) => u.username === username);
+export const authFactory = (secret: Secret) =>async (username: string, password: string) => {
+  const wrappedUser = await login({username, password});
 
-  if (!user || user.password !== password) {
+  if (!wrappedUser.succeed) {
     throw new AuthError("invalid username or password");
   }
+  const user = wrappedUser.value;
 
   return jwt.sign(
     {
